@@ -4,6 +4,7 @@ as a ready-to-clone GitHub template.
 
 ## Prerequisite
 - [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)
+- [Visual Studio](https://visualstudio.microsoft.com/vs/community/) (for Windows builds)
 
 ## Build from source
 1. Create a new conda environment based on the provided `environment.yaml`:
@@ -12,7 +13,7 @@ as a ready-to-clone GitHub template.
     ```
 2. Activate the new conda environment:
     ```shell
-    conda activate rdkit_dev_template
+    conda activate <full-file-path>\.conda-env
     ```
 3. Run CMake configuration step
     ```shell

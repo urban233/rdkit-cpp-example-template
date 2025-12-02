@@ -15,7 +15,6 @@ message(STATUS "Using Conda DLL directory: ${CONDA_DLL_DIR}")
 # Modules
 # ------------------------------------------------------------------
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-include(DetectConda)
 
 # ------------------------------------------------------------------
 # Dependencies
@@ -27,7 +26,7 @@ find_package(Boost CONFIG COMPONENTS iostreams timer system REQUIRED)
 # Build executable
 # ------------------------------------------------------------------
 set(SOURCES
-    src/main/cpp/smiles_processing.cpp
+    src/cpp/smiles_processing.cpp
 )
 add_executable(smiles_processing ${SOURCES})
 target_link_libraries(smiles_processing
@@ -37,7 +36,9 @@ target_link_libraries(smiles_processing
     RDKit::SmilesParse
 )
 
-add_executable(tautomer_hash tautomer_hash.cpp)
+add_executable(tautomer_hash
+    src/cpp/tautomer_hash.cpp
+)
 target_link_libraries(tautomer_hash
     RDKit::MolHash
     RDKit::FileParsers
@@ -73,6 +74,10 @@ install(TARGETS smiles_processing
 # ------------------------------------------------------------------
 if(WIN32)
     include(BundleWindows)
+    bundle_windows(smiles_processing)
+    bundle_windows(tautomer_hash)
 elseif(UNIX)
     include(BundleUnix)
+    bundle_windows(smiles_processing)
+    bundle_windows(tautomer_hash)
 endif()
