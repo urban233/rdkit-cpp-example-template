@@ -44,3 +44,5 @@
 .conda-env
 
 build
+.cache
+.vs
