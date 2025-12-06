@@ -9,7 +9,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/dist" CACHE PATH "" FORCE)
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
-set(CONDA_DLL_DIR "${CMAKE_SOURCE_DIR}/.conda-env/Library/bin")
+#set(CONDA_DLL_DIR "${CMAKE_SOURCE_DIR}/.conda-env/Library/bin")
+set(CONDA_DLL_DIR "C:/Users/manfred/.local/share/mamba/envs/rdkit_dev/Library/bin")
+set(CONDA_DIR "C:/Users/manfred/.local/share/mamba/envs/rdkit_dev/Library")
 message(STATUS "Using Conda DLL directory: ${CONDA_DLL_DIR}")
 # ------------------------------------------------------------------
 # Modules
@@ -21,6 +23,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 # ------------------------------------------------------------------
 find_package(RDKit REQUIRED)
 find_package(Boost CONFIG COMPONENTS iostreams timer system REQUIRED)
+# set(OpenBabel3_DIR "${CONDA_DIR}")
+
+add_executable(obabel_demo src/cpp/obabel_demo.cpp)
+target_link_libraries(obabel_demo OpenBabel3)
 
 # ------------------------------------------------------------------
 # Build executable
