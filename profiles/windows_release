@@ -9,4 +9,4 @@ compiler.version=194
 os=Windows
 
 [options]
-smiles_processing/*:build_and_package=True
+rdkit_cpp_example/*:build_and_package=True
