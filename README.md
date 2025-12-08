@@ -2,6 +2,9 @@
 This repository is based on the blog post [Using the RDKit in a C++ program](https://greglandrum.github.io/rdkit-blog/posts/2021-07-24-setting-up-a-cxx-dev-env.html)
 as a ready-to-clone GitHub template.
 
+**NOTE**: This branch contains a new variant that uses `Conan` to build the library.
+To get the `Conda` version, please check the `conda` branch.
+
 ## Contents of this document
 * [Prerequisite](#Prerequisite)
 * [Build](#Build)
