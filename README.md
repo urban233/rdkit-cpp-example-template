@@ -7,13 +7,9 @@ as a ready-to-clone GitHub template.
 * [Build](#Build)
     * [From source](#From-source)
     * [Package as standalone folder](#Package-as-standalone-folder)
-* [Windows specific information](#Windows-specific-information)
-* [Conda related information](#Conda-related-information)
-    * [Update environment](#Update-environment)
-    * [Uninstall](#Uninstall)
 
 ## Prerequisite
-- [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)
+- [Python](https://www.python.org/)
 - [Visual Studio](https://visualstudio.microsoft.com/vs/community/) (for Windows builds)
 - gcc (for GNU Linux)
 - clang/Xcode (for macOS)
@@ -21,54 +17,40 @@ as a ready-to-clone GitHub template.
 ## Build
 
 ## From source
-1. Create a new conda environment based on the provided `environment.yaml`:
+1. Create a new Python virutal environment:
     ```shell
-    conda env create -f environment.yaml --prefix ./.conda-env
+    python -m venv .venv
     ```
-2. Activate the new conda environment:
+2. Activate the new Python virtual environment (for Windows):
     ```shell
-    conda activate <full-file-path>\.conda-env
+    .\.venv\Scripts\activate
     ```
-3. Run CMake configuration step
+3. Install the `Conan` Python package:
     ```shell
-    mkdir build
-    cd build
-    cmake ..
+    pip install conan
     ```
-4. Run CMake build step for **unix-based**:
+4. Run Conan configuration step
     ```shell
-    make
+    conan install .
     ```
-    or for **Windows** use:
+5. Run CMake build step using the appropriate Conan profile (e.g. Windows):
     ```shell
-    cmake --build . --config Release
+    conan build . --profile .\profiles\windows_release
     ```
+    or for **Linux** use:
+    ```shell
+    conan build . --profile .\profiles\linux_release
+    ```
+   or for **macOS** use:
+    ```shell
+    conan build . --profile .\profiles\macos_release
+    ```
+
+**IMPORTANT**: The profiles for Linux and macOS are not yet tested. 
+
 
 ### Package as standalone folder
 **NOTE**: This procedure has been only tested on Windows yet. For macOS and Linux proceed with caution.
 
-The `CMakeLists.txt` file contains a specific `install` logic that packages all DLLs/so files into the install `bin` folder.
-For this run simply the `install` target.
-```shell
-cmake --build . --target install
-```
-Be sure that your current working directory is the `build/` folder and your conda environment is activated.
-
-## Windows specific information
-To develop the library or executable in Visual Studio with CMake (no Visual Studio solution!), set the CMake executable in the settings `Tools > Options > CMake > General > `  to the `cmake` binary of the conda environment.
-
-![Visual Studio 2026 CMake Settings](assets/vs2026_cmake_settings.png)
-
-## Conda related information
-
-### Update environment
-To update the conda environment based on the `environment.yaml` file run:
-```shell
-conda env update -f environment.yaml --prefix ./myenv --prune
-```
-
-### Uninstall
-To remove the conda environment again run:
-```shell
-conda env remove --prefix ./myenv
-```
+The default profiles located under the `profiles` folder can be used to package the library as a standalone folder.
+To change the output folder, modify the `local_package_dir` property in the `conanfile.py` file.
