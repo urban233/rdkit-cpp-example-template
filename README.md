@@ -10,6 +10,7 @@ To get the `Conda` version, please check the `conda` branch.
 * [Build](#Build)
     * [From source](#From-source)
     * [Package as standalone folder](#Package-as-standalone-folder)
+* [Using Conda](#Using-Conda)
 
 ## Prerequisite
 - [Python](https://www.python.org/)
@@ -57,3 +58,17 @@ To get the `Conda` version, please check the `conda` branch.
 
 The default profiles located under the `profiles` folder can be used to package the library as a standalone folder.
 To change the output folder, modify the `local_package_dir` property in the `conanfile.py` file.
+
+## Using Conda
+This repository also contains a Conda variant that can be used for dependency management.
+To use it, please first clone the repo:
+```shell
+git clone https://github.com/urban233/rdkit-cpp-example-template.git
+```
+and then switch to the `conda` branch:
+```shell
+cd rdkit-cpp-example-template
+git checkout conda
+```
+
+This branch contains a `README.md` file with instructions on how to use Conda to build the library.
