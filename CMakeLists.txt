@@ -64,19 +64,17 @@ install(TARGETS smiles_processing
 # Bundling logic
 # ------------------------------------------------------------------
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "" FORCE)
-
-#if(WIN32)
-#    # Copy DLLs at install time (CMake ≥ 3.21)
-#    install(TARGETS smiles_processing
-#            RUNTIME DESTINATION bin
-#            RUNTIME_DEPENDENCIES
-#            POST_EXCLUDE_REGEXES ".*system32/.*"
-#    )
-#    include(BundleWindows)
-#    bundle_windows(smiles_processing)
-#    bundle_windows(tautomer_hash)
-#elseif(UNIX)
-#    include(BundleUnix)
-#    bundle_windows(smiles_processing)
-#    bundle_windows(tautomer_hash)
-#endif()
+# ------------------------------------------------------------------
+# RPATH handling (only for Unix-like systems)
+# ------------------------------------------------------------------
+if(APPLE)
+    set_target_properties(smiles_processing PROPERTIES
+            BUILD_WITH_INSTALL_RPATH TRUE
+            INSTALL_RPATH "@executable_path"  # Same directory on macOS
+    )
+elseif(UNIX)
+    set_target_properties(smiles_processing PROPERTIES
+            BUILD_WITH_INSTALL_RPATH TRUE
+            INSTALL_RPATH "$ORIGIN"  # Same directory on Linux
+    )
+endif()
