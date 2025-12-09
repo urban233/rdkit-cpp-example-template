@@ -1,89 +1,62 @@
 cmake_minimum_required(VERSION 3.25)
-project(advanced_depict LANGUAGES CXX)
+project(rdkit_cpp_example LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-# Set a default install dir (local)
-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/dist" CACHE PATH "" FORCE)
-message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
-
-#set(CONDA_DLL_DIR "${CMAKE_SOURCE_DIR}/.conda-env/Library/bin")
-set(CONDA_DLL_DIR "C:/Users/manfred/.local/share/mamba/envs/rdkit_dev/Library/bin")
-set(CONDA_DIR "C:/Users/manfred/.local/share/mamba/envs/rdkit_dev/Library")
-message(STATUS "Using Conda DLL directory: ${CONDA_DLL_DIR}")
-# ------------------------------------------------------------------
-# Modules
-# ------------------------------------------------------------------
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # ------------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------------
 find_package(RDKit REQUIRED)
 find_package(Boost CONFIG COMPONENTS iostreams timer system REQUIRED)
-# set(OpenBabel3_DIR "${CONDA_DIR}")
-
-add_executable(obabel_demo src/cpp/obabel_demo.cpp)
-target_link_libraries(obabel_demo OpenBabel3)
 
 # ------------------------------------------------------------------
-# Build executable
+# Helper function to create executables with common settings
 # ------------------------------------------------------------------
-set(SOURCES
-    src/cpp/smiles_processing.cpp
-)
-add_executable(smiles_processing ${SOURCES})
-target_link_libraries(smiles_processing
-    PRIVATE
-    RDKit::MolHash
-    RDKit::FileParsers
-    RDKit::SmilesParse
-)
+function(add_rdkit_executable TARGET_NAME SOURCE_FILE)
+    add_executable(${TARGET_NAME} ${SOURCE_FILE})
 
-add_executable(tautomer_hash
-    src/cpp/tautomer_hash.cpp
-)
-target_link_libraries(tautomer_hash
-    RDKit::MolHash
-    RDKit::FileParsers
-    RDKit::SmilesParse
-    Boost::timer
-)
+    # Link libraries (passed as additional arguments)
+    target_link_libraries(${TARGET_NAME} PRIVATE ${ARGN})
 
-# ------------------------------------------------------------------
-# RPATH (Unix)
-# ------------------------------------------------------------------
-if(APPLE)
-    set_target_properties(smiles_processing PROPERTIES
-        INSTALL_RPATH "@executable_path/../lib"
+    # RPATH handling (Unix-like systems)
+    if(APPLE)
+        set_target_properties(${TARGET_NAME} PROPERTIES
+                BUILD_WITH_INSTALL_RPATH TRUE
+                INSTALL_RPATH "@executable_path"
+        )
+    elseif(UNIX)
+        set_target_properties(${TARGET_NAME} PROPERTIES
+                BUILD_WITH_INSTALL_RPATH TRUE
+                INSTALL_RPATH "$ORIGIN"
+        )
+    endif()
+
+    # Install target
+    install(TARGETS ${TARGET_NAME}
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib
     )
-elseif(UNIX)
-    set_target_properties(smiles_processing PROPERTIES
-        INSTALL_RPATH "\$ORIGIN/../lib"
-        INSTALL_RPATH_USE_LINK_PATH TRUE
-    )
-endif()
+endfunction()
 
 # ------------------------------------------------------------------
-# Install base targets
+# Build executables
 # ------------------------------------------------------------------
-install(TARGETS smiles_processing
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
+add_rdkit_executable(smiles_processing
+        src/cpp/smiles_processing.cpp
+        RDKit::Depictor
+        RDKit::MolHash
+        RDKit::FileParsers
+        RDKit::SmilesParse
 )
 
-# ------------------------------------------------------------------
-# Bundling logic
-# ------------------------------------------------------------------
-if(WIN32)
-    include(BundleWindows)
-    bundle_windows(smiles_processing)
-    bundle_windows(tautomer_hash)
-elseif(UNIX)
-    include(BundleUnix)
-    bundle_windows(smiles_processing)
-    bundle_windows(tautomer_hash)
-endif()
+add_rdkit_executable(tautomer_hash
+        src/cpp/tautomer_hash.cpp
+        RDKit::GraphMol
+        RDKit::MolHash
+        RDKit::FileParsers
+        RDKit::SmilesParse
+        Boost::timer
+)
