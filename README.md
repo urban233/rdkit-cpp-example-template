@@ -1,9 +1,10 @@
 # rdkit-cpp-example-template
+
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/rdkit/rdkit/blob/master/LICENSE)
 [![Conan](https://img.shields.io/badge/conan-ready-brightgreen.svg)](https://conan.io/)
 
 This repository is based on the blog post [Using the RDKit in a C++ program](https://greglandrum.github.io/rdkit-blog/posts/2021-07-24-setting-up-a-cxx-dev-env.html)
-as a ready-to-clone GitHub template.
+as a ready-to-use GitHub template.
 
 **NOTE**: This branch contains a new variant that uses `Conan` to build the library.
 To get the `Conda` version, please check the `conda` branch.
@@ -16,6 +17,7 @@ To get the `Conda` version, please check the `conda` branch.
     * [Building the Conan RDKit package](#Building-the-Conan-RDKit-package)
 * [Working with CLion](#Working-with-CLion)
 * [Using Conda](#Using-Conda)
+* [License](#License)
 
 ## Prerequisite
 - [Python](https://www.python.org/)
@@ -121,3 +123,7 @@ git checkout conda
 ```
 
 This branch contains a `README.md` file with instructions on how to use Conda to build the library.
+
+## License
+
+This project is licensed under the **BSD License** – see the [LICENSE](https://github.com/rdkit/rdkit/blob/master/LICENSE) file for details.
