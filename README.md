@@ -49,15 +49,15 @@ To get the `Conda` version, please check the `conda` branch.
     ```
 5. Run CMake build step using the appropriate Conan profile (e.g. Windows):
     ```shell
-    conan build . --profile .\profiles\windows_release
+    conan build . --profile .\profiles\windows\release
     ```
     or for **Linux** use:
     ```shell
-    conan build . --profile .\profiles\linux_release
+    conan build . --profile ./profiles/linux/release
     ```
    or for **macOS** use:
     ```shell
-    conan build . --profile .\profiles\macos_release
+    conan build . --profile ./profiles/macos/release
     ```
 
 **IMPORTANT**: Be aware that the profiles for Linux and macOS are only tested via the GitHub action workflow. 
